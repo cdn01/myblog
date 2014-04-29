@@ -1,3 +1,8 @@
 <?php
-echo "welcome to my blog";
+/**
+ * 
+ */
 
+require 'ck_loader.php';
+
+$module = 

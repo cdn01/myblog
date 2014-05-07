@@ -1,42 +1,5 @@
 <?php
-
-/*
-
-CREATE TABLE `matches` (
-  `id` bigint(20) NOT NULL,
-  `matches` text,
-  `parent` int not null DEFAULT 0, 
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-http://roll.sohu.com/20140502/n399068546.shtml
-*/
-header("Content-type:text/html;charset=utf-8");
-$url = "http://yule.sohu.com/20140430/n399015764.shtml";
-$content = mb_convert_encoding(file_get_contents($url), "UTF-8","GBK") ;;
-//echo $content;
-$conn = mysql_connect("localhost","root","");
-mysql_select_db("task",$conn);
-mysql_query("set names utf8");
-
-function query($sql){
-	echo $sql;
-	$cmd = mysql_query($sql);
-	$result = array();
-	while($rs = mysql_fetch_array($cmd))
-	{
-		$result[] = $rs;
-	}
-	if($result){
-		return false;
-	}
-	return $result;
-}
-
-function println($str){
-	echo $str."<br><hr><br>";
-}
+require 'header.php'; 
 
 function div_replace($content){
 	$content = trim($content);
@@ -52,18 +15,28 @@ function getImage($content){
 	preg_match_all("//");
 return ;
 }
-function match($str){
-	$title_arr = query("select * from matches where typename = 'title' group by belong order by id desc");
-	print_r($title_arr);
-	//Title
+function match_soho($str){
 	preg_match("/<h1 itemprop=\"headline\">(.*)<\/h1>/iUs",$str,$title_p);
 	$title = trim($title_p[1]);
-	println($title);
-	//Content
 	preg_match("/<\!\-\- 正文 \-\->(.*)<\!\-\- 分享 \-\->/iUs",$str,$content_p);
-	$content = div_replace($content_p[1]);
-	print_r($content);
+	return $content = div_replace($content_p[1]);
 }
 
-match($content);
+function match_ifeng($str){
+	preg_match("/<h1 itemprop=\"headline\" id=\"artical_topic\">(.*)<\/h1>/iUs", $str,$title_p);
+	$title = trim($title_p[1]);
+	preg_match("/<\!\-\-mainContent begin\-\->(.*)<\!\-\-mainContent end\-\->/iUs",$str,$content_p);
+	return $content = div_replace($content_p[1]);
+}
+$content = "";
+$url = "http://ent.ifeng.com/a/20140507/40049157_0.shtml";
+$file = mb_convert_encoding(html($url), "UTF-8","GBK") ;
+if(strpos("<!-- 分享 -->", $file)){
+	$content = match_soho($file);
+}
+else if(strpos("<!--mainContent end-->", $file)){
+	$content = match_ifeng($file);
+}
+
+println($content);
 ?>

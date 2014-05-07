@@ -59,6 +59,8 @@ foreach ($keyword_arr as $key => $value) {
 		}
 	}
 }
+
+/* 
 //实时热点排行榜 
 getContent("http://top.baidu.com/buzz?b=1",4); 
 //七日关注排行榜 
@@ -70,7 +72,7 @@ getContent("http://top.baidu.com/buzz?b=344&c=7",7);
 //今日世说新词排行榜
 getContent("http://top.baidu.com/buzz?b=396&c=12",8);
 
-
+ */
 
 
 

@@ -160,5 +160,5 @@ function insert_article($title,$content,$tag,$link,$catid,$source,$click){
 }
 ?>
 <script type='text/javascript'>
-	 setTimeout('location.href="getcontent.php"',1000*9);
+// 	 setTimeout('location.href="getcontent.php"',1000*9);
 </script>

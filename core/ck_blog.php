@@ -12,6 +12,8 @@ class ck_blog{
 	protected $_db = array();
 	private $_copen = false;
 	protected $_cache = null;
+	protected $_redis = null;
+	protected $_menu = array();
 	
 	protected function __construct(){
 	}
@@ -58,9 +60,7 @@ class ck_blog{
 	{
 		if (!is_object($this->_exception))
 		{
-			ck_blog
-			
-			::get_instance()->load('core/ck_exception');
+			ck_blog::get_instance()->load('core/ck_exception');
 
 			// construct a exception instance
 			// ------------------------------------
@@ -223,10 +223,10 @@ class ck_blog{
     	if (!is_object($this->_cache)) 
         {
             // Construct a icache_saver Instance
-			xt_box::get_instance()->load('libraries/ck_cache');
-			xt_box::get_instance()->config()->load('cache');
+			ck_blog::get_instance()->load('libraries/ck_cache');
+			ck_blog::get_instance()->config()->load('cache');
 			
-			$name = xt_box::get_instance()->config()->item('cache_way');
+			$name = ck_blog::get_instance()->config()->item('cache_way');
 			if (!$name) {
 				$name = 'redis';
 			}
@@ -238,4 +238,60 @@ class ck_blog{
         
         return $this->_cache;
     }
+    
+    public function db($instance = 'default_db')
+    {
+    	if (empty($this->_db) || empty($this->_db[$instance]))
+    	{
+    		ck_blog::get_instance()->load('libraries/easy_db');
+    			
+    		// 实例化数据库操作对象
+    		// ------------------------------------------------------------------------------------
+    		$this->_db[$instance] = new easy_db(ck_blog::get_instance()->config()->item($instance));
+    		$this->_db[$instance]->connect();
+    		$this->_db[$instance]->select();
+    	}
+    	return $this->_db[$instance];
+    }
+    
+    public function menu(){
+    	if(empty($this->_menu)){
+    		ck_blog::get_instance()->load("libraries/ck_menu");
+    		$this->_menu = new ck_menu(); 
+    	}
+    	return $this->_menu;
+    }
+    
+    public function redis()
+    {
+    	if (!is_object($this->_redis))
+    	{
+    		ck_blog::get_instance()->config()->load('cache');
+    		 
+    		// Construct a Redis Instance
+    		// --------------------------
+    		$this->_redis = new Redis();
+    		 
+    		// 加载配置
+    		// --------------------------------------------------------------
+    		$server = ck_blog::get_instance()->config()->item('redis_server');
+    		if (empty($server))
+    		{
+    			// default to localhost
+    			$servers = array('hostname' => '127.0.0.1', 'port' => 80, 'pconnect' => false);
+    		}
+    		 
+    		if ($server['pconnect']) {
+    			$this->_redis->pconnect($server['hostname'], $server['port']);
+    		} else {
+    			$this->_redis->connect($server['hostname'], $server['port']);
+    		}
+    		 
+    		$this->_redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_NONE);
+    		$this->_redis->setOption(Redis::OPT_PREFIX, 'myblog:');
+    	}
+    
+    	return $this->_redis;
+    }
+     
 }

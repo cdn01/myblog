@@ -6,7 +6,7 @@
 $config['default_db']['dbhost'] 	= '127.0.0.1';
 $config['default_db']['dbuser'] 	= 'root';
 $config['default_db']['dbpassword'] = '';
-$config['default_db']['dbname'] 	= 'doing';
+$config['default_db']['dbname'] 	= 'myblog';
 $config['default_db']['encoding'] 	= 'utf-8';
 $config['default_db']['pconnect'] 	= false;
 

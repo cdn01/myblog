@@ -1,8 +1,6 @@
 <?php
-include(substr(str_replace("\\", "/", dirname(__FILE__)), 0,-7)."/config.php");
-
-
-
+require 'header.php';
+ 
 echo "<br><hr>".date("H:i:s",time())."<br><hr>";
 $url = "http://s.weibo.com/top/summary?cate=homepage";
 $content = html($url);

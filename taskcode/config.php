@@ -76,7 +76,7 @@ function getHuati($url){
     curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
     curl_setopt($ch, CURLOPT_TIMEOUT, 60); 
     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-   'Accept: */*',
+    'Accept: */*',
     'Accept-Charset: UTF-8,*;q=0.5',
     'Accept-Encoding: gzip,deflate,sdch',
     'Accept-Language: zh-CN,zh;q=0.8',
@@ -93,8 +93,7 @@ function getHuati($url){
     return $_str;
 }	
 function str_conv($str)
-{
-	// $str = str_replace("\n", "<br>", $str);
+{ 
 	$str = addslashes ($str);
 	return $str;
 }
@@ -151,9 +150,16 @@ function unicode_decode($name)
     }
     return $name;
 }
-
-function println($str){
-    echo "<br><hr>".$str;
+ 
+function println($str) {
+	print_r ( $str );
+	echo "<br><hr><br>";
+}
+function saveImg($src){
+	$file = file_get_contents($src);
+	$img_name = time().".jpg";
+	file_put_contents("./images/".$img_name, $file);
+	return $img_name;
 }
 $aimama_url = "http://redirect.simba.taobao.com/rd?w=unionnojs&f=http%3A%2F%2Fre.taobao.com%2Feauction%3Fe%3D7yz2kKA55Wwv5jEtdFQGvhaSDMBVO0lUqklVR2qet6HlL1tPWpvWRNSY3YY37eLzoAY2eQvj%252Bx4qdWKFRBhE7piUYGvTpfXZjYjAuDby3FTLeDEbMH2uIQ%253D%253D%26ptype%3D100010&k=e2e107a2b72ca1b1&c=un&b=alimm_0&p=mm_17339625_5528706_17112601";
 ?>

@@ -46,4 +46,33 @@ EOT;
 	}
 
 }
+/*
+  
+CREATE TABLE `huati` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `huati` varchar(255) DEFAULT NULL,
+  `zhishu` int(11) DEFAULT NULL,
+  `type` int(11) DEFAULT NULL,
+  `gettime` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `huati` (`huati`)
+) ENGINE=MyISAM AUTO_INCREMENT=121 DEFAULT CHARSET=utf8;
+
+*/
 ?> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

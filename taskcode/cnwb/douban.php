@@ -15,7 +15,6 @@ function getComments($vid,$key){
 	$html = html($url);
 	
     preg_match_all("/<p class=\"\">(.*)<\/p>/iUs", $html, $matches);
-    // print_r($matches[1]);
     foreach ($matches[1] as $key => $value) {
     	$sql = "insert into ff_comments (vid,comments) values ('".$vid."','".preg_replace("/<(.*)>/iUs", "", $value)."')";
     	mysql_query($sql);

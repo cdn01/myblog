@@ -1,10 +1,11 @@
 <?php
 include(substr(str_replace("\\", "/", dirname(__FILE__)), 0,-5)."/config.php"); 
 include(str_replace("\\", "/", dirname(__FILE__))."/CnwbBot.php");  
+include(str_replace("\\", "/", dirname(__FILE__))."/douban.php");  
 
-$sql = "select * from do_account order by postnum asc limit 1";
+$sql = "select * from auto_account order by postnum asc limit 1";
 $do_account = query($sql); 
-$sql = "update do_account set postnum = postnum + 1 where id = '".$do_account[0]['id']."'";
+$sql = "update auto_account set postnum = postnum + 1 where id = '".$do_account[0]['id']."'";
 mysql_query($sql);
 
 $param = array();
@@ -12,51 +13,52 @@ $user = substr($do_account[0]["user"], 0,strpos($do_account[0]["user"], "@"));
 $param['uname'] = $do_account[0]["user"];
 $param['pwd'] = $do_account[0]["psw"];
 $cnwb = new CnwbBot($user);
-	// 登录
 $islogin = $cnwb->login($param);
 
-$sql = "select * from auto_article where isweibo = 0  and catid=3  and gettime > '".date("Y-m-d",strtotime("-1 day"))."' order by click desc limit 1";
+$sql = "select * from qqwb  order by ispost asc , hot desc    limit 1";
 $article = query($sql);
-if(!isset($article[0]['id'])){
-	$sql = "select * from auto_article where isweibo = 0  and catid!=3  and gettime > '".date("Y-m-d",strtotime("-1 day"))."' order by click desc limit 1";
-	$article = query($sql);
+mysql_query("update qqwb set ispost = ispost + 1 where id = '".$article[0]['id']."'");
+
+$sql = "select * from huati order by postnum asc ,zhishu desc  limit 1";
+$huati = query($sql);
+mysql_query("update huati set postnum = postnum + 1 where id = '".$huati[0]['id']."'");
+
+
+$message = "#".$huati[0]['huati']."#  ".trim($article[0]['title'])." \r\n ".trim($article[0]['summary'])."  更多:http://pp1024.duapp.com/404.html   "; 
+println($message);  
+$imgsrc = $article[0]['img'];
+if(substr($article[0]['pic_arr'], 0,strpos($article[0]['pic_arr'], "@@@@@@"))){
+	$imgsrc = substr($article[0]['pic_arr'], 0,strpos($article[0]['pic_arr'], "@@@@@@"))."/460";
 }
-if(isset($article[0]['id'])){
-	mysql_query("update auto_article set isweibo =  1 where id = '".$article[0]['id']."'");
+$imgdir = saveImg($imgsrc);
+  
 
+$image_dir = str_replace("\\", "/", dirname(__FILE__))."/images/".$imgdir;
+$result = $cnwb->sendWeibo($message,$image_dir);
 
-	$message = "#".$article[0]['tag']."#  ".trim($article[0]['title'])." 详情:http://auto825.com/?tag=".urlencode($article[0]['tag']);
-	// if($article[0]['image_dir']){
-	// $image_dir = substr(str_replace("\\", "/", dirname(__FILE__)), 0,-5)."/difbot/baidu/".$article[0]['image_dir']; 
-	// $result = $cnwb->sendWeibo($message,$image_dir);
-	// }else{
-	//  $result = $cnwb->sendWeibo($message);
-	// }
-	$result = $cnwb->sendWeibo($message);
-	$log = json_decode(substr($result,strpos($result, '{"id":"')),true);
-	// print_r($log);
-	if($log["ok"]!="1"){
-		mysql_query("update auto_article set isweibo = 0 where id = '".$article[0]['id']."'");
-		$cnwb->slog($param['uname']); 
-		 tmail($param['uname']); 
-	 	sleep(50);
+$log = json_decode(substr($result,strpos($result, '{"id":"')),true);
+if($log["ok"]!="1"){
+	$cnwb->slog($param['uname']."----".$param['pwd']);  
+ 	sleep(30);
 print <<<EOT
-	<script type='text/javascript'>
-	location.href="post_weibo.php";
-	</script>
+<script type='text/javascript'>
+location.href="post_weibo.php";
+</script>
 EOT;
 
-	}
-	echo date("Y-m-d H:i:s",time())."<br><hr>用户名:&nbsp;&nbsp;&nbsp;".$param['uname']."<br><hr>密码 :&nbsp;&nbsp;&nbsp;".$param['pwd']."<br><hr>".$message."<br><hr>".$log["msg"];
+}else{
+	echo "<br><hr>".date("Y-m-d H:i:s",time())."<br><hr>用户名:&nbsp;&nbsp;&nbsp;".$param['uname']."<br><hr>密码 :&nbsp;&nbsp;&nbsp;".$param['pwd']."<br><hr>".$message."<br><hr>".$log["msg"];
 	if($log['id']){
-		$insert_sql = "insert into auto_weibo_create (cid,postuser,posttime) values ('".$log['id']."','".$user."','".date("Y-m-d H:i:s",time())."')";
+		$insert_sql = "insert into weibo_create (cid,postuser,posttime) values ('".$log['id']."','".$user."','".date("Y-m-d H:i:s",time())."')";
 		mysql_query($insert_sql);
 	}
+	$rand = rand(1,3);
+	echo "<br><hr>".($rand*20)."  秒后跳转";
+print <<<EOT
+<script type='text/javascript'>
+		setTimeout("location.href='post_weibo.php'",1000*40*$rand);
+</script>
+EOT;
 }
-$rand = rand(1,3);
-echo "<br><hr>".($rand*40)."  秒后跳转";
 
 ?>
-<script type='text/javascript'>
-		setTimeout("location.href='post_weibo.php'",1000*40*<?php echo $rand;?>);
-</script>

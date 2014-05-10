@@ -17,29 +17,53 @@ $islogin = $cnwb->login($param);
 
 $sql = "select * from qqwb  order by ispost asc , hot desc    limit 1";
 $article = query($sql);
-mysql_query("update qqwb set ispost = ispost + 1 where id = '".$article[0]['id']."'");
+mysql_query("update qqwb set ispost = ispost + 1 ,updatetime = '".date("Y-m-d H:i:s",time())."' where id = '".$article[0]['id']."'");
 
-$sql = "select * from huati order by postnum asc ,zhishu desc  limit 1";
+function getHeadMsg($flag="huati"){
+	switch ($flag){
+		case "huati":
+			$sql = "select * from huati where id<60 order by postnum asc ,zhishu desc  limit 1";
+			$huati = query($sql);
+			mysql_query("update huati set postnum = postnum + 1 where id = '".$huati[0]['id']."'");
+			return $huati[0]['huati'];
+			break;
+		default:
+			$sql = "select * from auto_tag   order by postnum asc ,zhishu desc  limit 1";
+			$huati = query($sql);
+			mysql_query("update auto_tag set postnum = postnum + 1 where id = '".$huati[0]['id']."'");
+			return $huati[0]['tag'];
+			break;
+	}
+}
+
+$sql = "select * from huati where id<60 order by postnum asc ,zhishu desc  limit 1";
 $huati = query($sql);
 mysql_query("update huati set postnum = postnum + 1 where id = '".$huati[0]['id']."'");
 
-
-$message = "#".$huati[0]['huati']."#  ".trim($article[0]['title'])." \r\n ".trim($article[0]['summary'])."  更多:http://pp1024.duapp.com/404.html   "; 
+$huati = getHeadMsg("hotsearch");
+$message = "#".$huati."#  ".trim($article[0]['title'])." \r\n ".trim($article[0]['summary'])."  更多:http://pp1024.duapp.com/404.html   "; 
 println($message);  
-$imgsrc = $article[0]['img'];
-if(substr($article[0]['pic_arr'], 0,strpos($article[0]['pic_arr'], "@@@@@@"))){
-	$imgsrc = substr($article[0]['pic_arr'], 0,strpos($article[0]['pic_arr'], "@@@@@@"))."/460";
+$imgdir = $article[0]['local_img'];
+if(!$imgdir){
+	$imgsrc = $article[0]['img'];
+	if(substr($article[0]['pic_arr'], 0,strpos($article[0]['pic_arr'], "@@@@@@"))){
+		$imgsrc = substr($article[0]['pic_arr'], 0,strpos($article[0]['pic_arr'], "@@@@@@"))."/460";
+	}
+	$imgdir = saveImg($imgsrc);
+	$imgdir = str_replace("\\", "/", dirname(__FILE__))."/images/".$imgdir;
+	$sql = "update qqwb set local_img = '".$imgdir."' where id = '".$article[0]['id']."' ";
+	mysql_query($sql);
 }
-$imgdir = saveImg($imgsrc);
+
   
 
-$image_dir = str_replace("\\", "/", dirname(__FILE__))."/images/".$imgdir;
-$result = $cnwb->sendWeibo($message,$image_dir);
+
+$result = $cnwb->sendWeibo($message,$imgdir);
 
 $log = json_decode(substr($result,strpos($result, '{"id":"')),true);
 if($log["ok"]!="1"){
 	$cnwb->slog($param['uname']."----".$param['pwd']);  
- 	sleep(30);
+ 	sleep(300);
 print <<<EOT
 <script type='text/javascript'>
 location.href="post_weibo.php";
@@ -52,11 +76,11 @@ EOT;
 		$insert_sql = "insert into weibo_create (cid,postuser,posttime) values ('".$log['id']."','".$user."','".date("Y-m-d H:i:s",time())."')";
 		mysql_query($insert_sql);
 	}
-	$rand = rand(1,3);
-	echo "<br><hr>".($rand*20)."  秒后跳转";
+	$rand = rand(5,10);
+	echo "<br><hr>".($rand*20)."  秒钟后跳转";
 print <<<EOT
 <script type='text/javascript'>
-		setTimeout("location.href='post_weibo.php'",1000*40*$rand);
+		setTimeout("location.href='post_weibo.php'",1000*30*$rand);
 </script>
 EOT;
 }

@@ -194,7 +194,7 @@ class CnwbBot
                     echo "\n";
                 $stream = $this->_html($picPostUrl, $data);
                     sleep(2);
-                preg_match("/preview\(1,'(.*)'/iUs", $stream,$pic_p);
+                preg_match("/preview\(1,'(.*)'/iUs", $stream,$pic_p); 
                 echo $picFile = $pic_p[1];
                     echo "\n";
                 $picArr = explode("/", $pic);

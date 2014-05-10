@@ -116,7 +116,7 @@ function short_url($url){
 } 
 function slog($accoutn,$msg)
 {  
-	file_put_contents("./log/log_".date("Y_d_m",time()).".txt", "-----------".date("Y-d-m H:i:s",time())."-----------\n".$accoutn."-->".$msg , FILE_APPEND);
+	file_put_contents("./log/log_".date("Y_m_d",time()).".txt", "-----------".date("Y-d-m H:i:s",time())."-----------\n".$accoutn."-->".$msg , FILE_APPEND);
 }
 function html_decode($str){
 		$str = str_replace("&#39;", "'", $str);

@@ -18,7 +18,7 @@ EOT;
 	$data = $page_json['data']['html'];  
 	preg_match_all("/#(.*)#(.*)<span class=\"num_info\">(.*)<\/span>/iUs", $data, $matches);
 	print_r($matches[1]);
-	if(count($matches[1])<1){
+	if(count($matches[1])<1||$p>3){
 		echo "<br><hr>";
 		echo date("Y-m-d H:i:s",time());
 		echo "<br><hr>";

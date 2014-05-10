@@ -1,6 +1,16 @@
 <?php
 require 'header.php';
- 
+include 'auto_date.php';
+$now = date("Y-m-d",time());
+if($now != $yesterday){
+	file_put_contents("auto_date.php",'<?php $yesterday ="'.$now.'"; ?>');
+	mysql_query(" truncate auto_tag ");
+	print <<<EOT
+<script type='text/javascript'>
+		setTimeout("location.href='gettags.php'",1000*10);
+</script>
+EOT;
+}
 echo "<br><hr>".date("H:i:s",time())."<br><hr>";
 $url = "http://s.weibo.com/top/summary?cate=homepage";
 $content = html($url);
@@ -42,12 +52,9 @@ foreach ($keywords_t5[1] as $k5 => $v5) {
 }
   
 $keyword_arr = array_reverse($keyword_arr);
-// print_r($keyword_arr);
 
 foreach ($keyword_arr as $key => $value) {
 	$sql =  "insert into auto_tag (tag,catid,gettime,zhishu) values ('".$value['tag']."','3','".date("Y-m-d H:i:s",time())."','".$value['zhishu']."') ;";
-	// echo $sql;
-	// echo "<br><hr>";
 	if(!mysql_query($sql)){
 		$sql = "select * from auto_tag where tag ='".$value['tag']."' and gettime > '".date("Y-m-d",time())."' ";
 		$temp = query($sql);

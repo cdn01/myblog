@@ -43,7 +43,7 @@ class CnwbBot
         }
         function slog($accoutn)
         {  
-          file_put_contents("./log/log_".date("Y_d_m",time()).".txt", "\n-----------".date("Y-d-m H:i:s",time())."-----------\n".$accoutn , FILE_APPEND);
+          file_put_contents("./log/log_".date("Y_m_d",time()).".txt", "\n-----------".date("Y-d-m H:i:s",time())."-----------\n".$accoutn , FILE_APPEND);
         }
         public function login($param)
         {

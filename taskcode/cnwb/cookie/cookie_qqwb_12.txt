@@ -4,4 +4,4 @@
 
 #HttpOnly_.weibo.cn	TRUE	/	FALSE	1402453524	_T_WM	b3b0c453e5f008d55bd20ccd24e0c1d5
 #HttpOnly_.weibo.cn	TRUE	/	FALSE	1399865124	USER_LAST_LOGIN_NAME	qqwb_12%40126.com
-#HttpOnly_.weibo.cn	TRUE	/	FALSE	1402453524	gsid_CTandWM	4um885211SCjJxLaxXVa4lA5E8r
+#HttpOnly_.weibo.cn	TRUE	/	FALSE	1402453524	gsid_CTandWM	4uet85211CeYlimbkA9QflA5E8r

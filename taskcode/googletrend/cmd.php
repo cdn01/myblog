@@ -2,16 +2,20 @@
 	include(str_replace("\\", "/", dirname(__FILE__))."/lib/curl.class.php");
     include(str_replace("\\", "/", dirname(__FILE__))."/lib/config.php");
     
-    $sql = "select * from google_trends_country order by dataid asc ";
+    $sql = "select * from google_trends_country where `check` = '1' order  by dataid asc ";
     $country_arr = query($sql);
     $_t = 1;
 ?>
 <html>
 <head>
 <style type="text/css">
-	.cmd{ width:100%;height:50px;float:left;border: 1px solid #000;margin:0 auto 3px;}
+	.cmd{ width:100px;height:50px;float:left;border: 1px solid #000;margin:10px 0 0 10px;}
 	.cmd iframe{width:100%;height:100%;border:none;}
-	.pannel{width:100%;height:100%; }
+	.longwidth{width:100%;}
+	.pannel{width:100%;}
+	.left{ float:left;width:100%;height:50px;}
+	.line{border-top:1px solid #000; height:10px;margin:10px 0 0 0;}
+	.get_article_pannel{ width:99%;height:100px;}
 </style>
 </head>
 <body>
@@ -30,7 +34,16 @@
 	<br>
 	<input type="button" name="" value="启动" id="start_btn"/>
 </div>
+
 <div class="pannel"></div>
+
+<div class='left line'></div>
+<div class='left'>
+	<input type="button" name="" value="GetArticle" id="getArticle" />
+</div>
+<div class="get_article_pannel" ></div>
+
+<div class='left line'></div>
 </body>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js" type="text/javascript"></script> 
 <script type="text/javascript">
@@ -42,6 +55,8 @@ $(function(){
 	var list_country = $(".list_country");
 	var dataid = $(".list_country input");
 	var country = $(".list_country span");
+	var getArticle =  $("#getArticle"); 
+	var article_pannel = $(".get_article_pannel");
 	country.each(function(i){
 		var index = i; 
 		$(this).bind("click",function(){
@@ -64,6 +79,9 @@ $(function(){
 			$(".pannel").html(cmd_dom)
 		}); 
 		$(".pannel").html(cmd_dom);
+	});
+	getArticle.bind("click",function(){
+		$(".get_article_pannel").html("<div class=\"cmd longwidth\"><iframe src=\"cmd_action.php\"></iframe></div>");
 	});
 	$(document).ready(function(){  
 	});

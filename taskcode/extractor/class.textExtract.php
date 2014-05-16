@@ -114,7 +114,7 @@ class textExtract {
 		
 		foreach( $lines as $line ) {
 			// remove the blanks in each line
-			$tmp = preg_replace( '/\s+/s', '', $line );
+			$tmp = preg_replace( '/\s+/s', ' ', $line );
 			$this->textLines[] = $tmp;
 		}
 	}

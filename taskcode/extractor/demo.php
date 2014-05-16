@@ -18,11 +18,12 @@
 	
 	require_once( 'class.textExtract.php' );
 	
-	$content = file_get_contents("http://life.gmw.cn/2014-02/10/content_10325781.htm");
+	$content = file_get_contents("http://www.sportingnews.com/nfl/story/2014-05-11/aj-mccarron-bengals-alabama-quarterback-injuries-health-cincinnati-qb-nfl-draft-pick-selection-stats-highlights");
 	$detect_encoding = mb_detect_encoding($content,array('ASCII','UTF-8','GB2312','GBK','BIG5')); 
     $content = mb_convert_encoding($content,'UTF-8',$detect_encoding);  
 	$iTextExtractor = new textExtract( $content, $BL_BLOCK );
 	$text = $iTextExtractor->getPlainText();
+	print_r($iTextExtractor->textLines);
 	print_r($text);
 	die();
 	

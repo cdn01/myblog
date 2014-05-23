@@ -8,18 +8,15 @@ $key = getKey();
 $link = getLink($key);
 
 $article = getArticle2($link);
-insertDB("yahoo_article", $article);
-/*  
-$article = getArticle($link);
+$insert_id = insertDB("yahoo_article", $article);
+$comments_arr = getComments($link); 
+insertDB("yahoo_comment",$comments_arr,$insert_id);
 
-print_r("{\"message\":\"{$link}\"}");
 
-insertDB("yahoo_article", $article);
- 
-$comments_arr = getComments($link);
- 
-insertDB("yahoo_comment",$comments_arr,"");
-*/
+
+
+
+
 
 function getArticle2($link){
 	println($link);
@@ -31,17 +28,31 @@ function getArticle2($link){
 	}
 	
 	$html = html($link);
+	$img = array();
+	if(preg_match("/<meta itemprop=\"image\" content=\"(.*)\"/iUs", $html,$itemprop_image_m)){ 
+// 		$img[] = $itemprop_image_m[1];
+	}
 	preg_match("/<title>(.*) - /iUs", $html,$title_m);
 	preg_match("/<\!\-\- google\_ad\_section\_start \-\->(.*)<\!\-\- google\_ad\_section\_end \-\->/iUs", $html,$matches);
 	$article = array();
 	$article['link'] = $link;
 	
 	if(preg_match("/<div class=\"yom-art-lead-img\">(.*)<\/div/iUs", $html,$image_m)){
-		$article['images'] = $image_m[1];
+		$img[] = $image_m[1];
 	}
 	
+	if(preg_match("/<div(.*)id=\"mediaarticlelead\">(.*)<\/div>/iUs", $html,$vedio_m)){
+		if(!strpos($vedio_m[2], '<div class="yom-art-lead-img">')){
+			$article['vedio'] = $vedio_m[2]."</div>";
+		}
+	}
+	
+	if(preg_match("/<figure class=\"small-cover(.*)<img src=\"(.*)\"(.*)<div class=\"caption\">(.*)<\/div>/iUs", $html,$img_small_m)){
+		$img[] = $img_small_m[2]."<!--caption-->".$img_small_m[4];
+	}
+	$article['images'] = implode("@@@@", $img);
 	$article['title'] = $title_m[1];
-	$article['content'] = $matches[1];  
+	$article['content'] = trim($matches[1]);  
 	return $article;
 	
 }
@@ -55,7 +66,7 @@ function getLink($key){
 			return $l;
 		}
 	}
-// 	die("{\"message\":\"Link is null\"}");
+	die("{\"message\":\"Link is null\"}");
 }
 
 function getKey(){
@@ -66,7 +77,7 @@ function getKey(){
 	if (!empty($key[0]['title'])){
 		return $key[0]['title'];
 	} 
-// 	die("{\"message\":\"Key is null\"}");
+	die("{\"message\":\"Key is null\"}");
 } 
 function getTitle($data){
 	return $data['title'];
@@ -106,6 +117,15 @@ function getMedia($data,$type="image"){
 	}
 	return   implode('@@@@@@@', $rs);
 }
+
+
+
+
+
+
+
+
+
 function getArticle($link){
 	$url = "http://www.diffbot.com/api/article?token=diffbotcomtestdrive&format=json&tags=true&url=".urlencode($link);
 	$data = json_decode(html($url),true);
@@ -122,6 +142,16 @@ function getArticle($link){
 	println($article); 
 	return $article;
 }
+
+
+
+
+
+
+
+
+
+
 function getComments($url,$aid=1){
 	$html = html($url);
 	preg_match("/content\_id=(.*)&amp;/iUs", $html,$comtent_id_m);
@@ -143,6 +173,11 @@ function getComments($url,$aid=1){
 	} 
 	return $rs;
 }
+
+
+
+
+
 
 function insertDB($table,$data,$type='single'){
 	$key = $val = array();
@@ -166,14 +201,9 @@ function insertDB($table,$data,$type='single'){
 			break;
 	}
 	mysql_query($sql);
+	return  mysql_insert_id();
 }
 
 ?>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js" type="text/javascript"></script> 
-
-<script type="text/javascript">
-$(document).ready(function(){
-	setTimeout("location.href='get.php'",1000*10);
-});
-</script> 
+ 
  

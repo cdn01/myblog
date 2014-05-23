@@ -1,5 +1,4 @@
 <?php  
-	// include(substr(str_replace("\\", "/", dirname(__FILE__)), 0,-6)."/wordpress/Wordpress.class.php"); 
 	include(str_replace("\\", "/", dirname(__FILE__))."/conn.php"); 
 	include(str_replace("\\", "/", dirname(__FILE__))."/TweetBot.php");  
 
@@ -20,13 +19,12 @@
 	$sql = "select gid,title from emlog_blog where emlog_blog.gid not in ( select gid from twitter_create ) limit 1;";
 	$article = query($sql);   
 
-	$host = "http://www.seois.org";
+	$host = "http://auto825.com/404.html";
 	$tweetUrl = $host."/?post=".$article[0]["gid"]; 
 
 	$msg = $article[0]['title']."  ".$tweetUrl;   
 	$html = $bot->create($msg);
 	$response = json_decode(substr($html, strpos($html, '{"created_at"')),true); 
-	// print_r($response);
 	$sql = "update twitter_account set postnum = postnum+1 where id ='".$account[0]["id"]."'";
 	mysql_query($sql);
 	if($response['id']){

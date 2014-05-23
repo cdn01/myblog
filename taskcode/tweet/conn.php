@@ -12,9 +12,7 @@
 	header("Content-type:text/html;charset=utf-8");
 	date_default_timezone_set("Asia/Chongqing");
 	set_time_limit(0);
-	// require_once(WWW."wb.php");
-	// require_once(WWW."curl.class.php");
-	// require_once(WWW."common.php");
+	
 
 	function query($sql)
 	{

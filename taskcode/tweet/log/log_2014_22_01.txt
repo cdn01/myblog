@@ -1,4 +1,0 @@
------------2014-22-01 15:16:44-----------
-cmd_01@126.com-->Your account has been suspended.
-For more information, please visit the
-<a href="https://twitter.com/account/suspended_help">Suspended Accounts Help Page</a>.

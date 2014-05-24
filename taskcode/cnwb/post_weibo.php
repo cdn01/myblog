@@ -34,13 +34,19 @@ function getHeadMsg($flag="huati"){
 			return $huati[0]['tag'];
 			break;
 	}
+	println($sql);
 }
 
 $sql = "select * from huati where id<60 order by postnum asc ,zhishu desc  limit 1";
+$flag = array("huati","auto_tag");
+$flag_msg = array("话题","热门搜索");
+$flag_i = rand(0, 1);
+println($flag_i);
+println($flag_msg[$flag_i]);
 $huati = query($sql);
 mysql_query("update huati set postnum = postnum + 1 where id = '".$huati[0]['id']."'");
 
-$huati = getHeadMsg("hotsearch");
+$huati = getHeadMsg($flag[$flag_i]);
 $message = "#".$huati."#  ".trim($article[0]['title'])." \r\n ".trim($article[0]['summary'])."  更多:http://pp1024.duapp.com/404.html   "; 
 println($message);  
 $imgdir = $article[0]['local_img'];
@@ -77,10 +83,10 @@ EOT;
 		mysql_query($insert_sql);
 	}
 	$rand = rand(5,10);
-	echo "<br><hr>".($rand*20)."  秒钟后跳转";
+	echo "<br><hr>".($rand*5)."  秒钟后跳转";
 print <<<EOT
 <script type='text/javascript'>
-		setTimeout("location.href='post_weibo.php'",1000*30*$rand);
+		setTimeout("location.href='post_weibo.php'",1000*5*$rand);
 </script>
 EOT;
 }

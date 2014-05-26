@@ -1,8 +1,19 @@
 <?php
 require 'header.php';
-
-$ctg = (!empty($_REQUEST['ctg1'])&&isset($_REQUEST['ctg1']))?$_REQUEST['ctg1']:"1";
-$url = "http://huati.weibo.com/aj_topiclist/big?_pv=1&ctg1={$ctg}&ctg2=1&prov=0&sort=time&p=1&_t=0&__rnd=".time();
+if((!empty($_REQUEST['p'])&&isset($_REQUEST['p']))){
+	$page = $_REQUEST['p'];
+	if($page>7){
+print <<<EOT
+<script type='text/javascript'>		
+ 	setTimeout("location.href='gettag_1.php?p=1'",1000*60*30);
+ </script> 
+EOT;
+exit(0);
+	}
+}else{
+	$page = 1;
+}
+$url = "http://huati.weibo.com/aj_topiclist/small?_pv=1&ctg1=99&ctg2=0&prov=0&sort=time&p={$page}&_t=0&__rnd=".time();
 $html = json_decode(html($url,false,true),true);
 
 $data = $html['data']['html'];
@@ -22,5 +33,5 @@ foreach ($tags as $k=>$t){
 
 ?>
 <script type='text/javascript'>		
- 	setTimeout("location.href='gettag_1.php?ctg1=<?php echo ++$ctg; ?>'",1000*5);
+ 	setTimeout("location.href='gettag_1.php?p=<?php echo ++$page; ?>'",1000*10);
  </script> 

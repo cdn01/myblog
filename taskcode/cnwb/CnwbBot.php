@@ -193,13 +193,16 @@ class CnwbBot
                 echo $data["pic"] = '@'.$pic;
                     echo "\n";
                 $stream = $this->_html($picPostUrl, $data);
+//                println($stream);die();
                     sleep(2);
+                    
                 preg_match("/preview\(1,'(.*)'/iUs", $stream,$pic_p); 
-                echo $picFile = $pic_p[1];
-                    echo "\n";
+                
+                $picFile = $pic_p[1];
+                println($picFile); 
                 $picArr = explode("/", $pic);
-                    echo $picArr[count($picArr)-1];
-                    echo "\n";
+                println($picArr[count($picArr)-1]) ;
+                    
                 $stream = $this->_html($sendMessageUrl, "content=".urlencode($message)."&picFile=".$picFile."&pic=".$picArr[count($picArr)-1]);
             } 
             return $stream;

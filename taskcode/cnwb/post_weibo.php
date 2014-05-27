@@ -66,12 +66,14 @@ $result = $cnwb->sendWeibo($message,$imgdir);
 $log = json_decode(substr($result,strpos($result, '{"id":"')),true);
 if($log["ok"]!="1"){
 	$cnwb->slog($param['uname']."----".$param['pwd']);  
-	$sql = "update auto_account set useful = 0 where id = '".$do_account[0]['id']."'";
+	$sql = "update auto_account set useful = 1 where id = '".$do_account[0]['id']."'";
 	mysql_query($sql);
+	println($sql);
  	sleep(10);
+ 	
 print <<<EOT
 <script type='text/javascript'>
-location.href="post_weibo.php";
+		setTimeout("location.href='post_weibo.php'",1000*30);
 </script>
 EOT;
 

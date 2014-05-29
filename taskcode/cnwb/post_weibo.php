@@ -76,7 +76,7 @@ print <<<EOT
 		setTimeout("location.href='post_weibo.php'",1000*30);
 </script>
 EOT;
-
+exit(0);
 }else{
 	echo "<br><hr>".date("Y-m-d H:i:s",time())."<br><hr>用户名:&nbsp;&nbsp;&nbsp;".$param['uname']."<br><hr>密码 :&nbsp;&nbsp;&nbsp;".$param['pwd']."<br><hr>".$message."<br><hr>".$log["msg"];
 	if($log['id']){
@@ -84,10 +84,10 @@ EOT;
 		mysql_query($insert_sql);
 	}
 	$rand = rand(5,10);
-	echo "<br><hr>".($rand*30)."  秒钟后跳转";
+	echo "<br><hr>".($rand*40)."  秒钟后跳转";
 print <<<EOT
 <script type='text/javascript'>
-		setTimeout("location.href='post_weibo.php'",1000*30*$rand);
+		setTimeout("location.href='post_weibo.php'",1000*40*$rand);
 </script>
 EOT;
 }

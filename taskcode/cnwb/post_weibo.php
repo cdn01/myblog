@@ -44,7 +44,7 @@ $flag_i = rand(0, 1);
 println($flag_msg[$flag_i]); 
 
 $huati = getHeadMsg($flag[$flag_i]);
-$message = "#".$huati."#  ".trim($article[0]['title'])." \r\n ".trim($article[0]['summary'])."  更多:http://pp1024.duapp.com/404.html   "; 
+$message = "#".$huati."#  ".trim($article[0]['title'])." \r\n ".trim($article[0]['summary'])."  更多:http://auto825.com   "; 
 println($message);  
 $imgdir = $article[0]['local_img'];
 if(!$imgdir){

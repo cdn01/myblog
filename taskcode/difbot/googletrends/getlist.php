@@ -13,7 +13,8 @@
 		$my_curl->openCurl($url,"ajax=1&htd=".$htd."&pn=p1&htv=l");
 		//print_r($my_curl->getOutput());
 		$response = json_decode($my_curl->getOutput(),true);
-		print_r($response['trendsByDateList']);
+		println($response['trendsByDateList']);
+		die();
 		$article = array();
 		try{
 			foreach($response['trendsByDateList'] as $_k=>$_v)

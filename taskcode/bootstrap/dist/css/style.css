@@ -1,0 +1,13 @@
+@CHARSET "UTF-8";
+body {
+    background: none repeat scroll 0 0 #E0E0E0;
+    font-family: "Helvetica Neue","Luxi Sans","DejaVu Sans",Tahoma,"Hiragino Sans GB",STHeiti !important;
+    padding-top: 70px;
+}
+.box {
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #E2E2E9;
+    border-radius: 3px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+    margin-bottom: 20px;
+}

@@ -40,11 +40,13 @@ function getHeadMsg($flag="huati"){
 
 $flag = array("huati","auto_tag");
 $flag_msg = array("话题","热门搜索");
+
+ 
 $flag_i = rand(0, 1); 
 println($flag_msg[$flag_i]); 
 
 $huati = getHeadMsg($flag[$flag_i]);
-$message = "#".$huati."#  ".trim($article[0]['title'])." \r\n ".trim($article[0]['summary'])."  更多:http://auto825.com   "; 
+$message = "#".$huati."#  ".trim($article[0]['title'])." \r\n ".trim($article[0]['summary'])."  更多:http://www.shenhuangji.com   "; 
 println($message);  
 $imgdir = $article[0]['local_img'];
 if(!$imgdir){
@@ -84,10 +86,10 @@ exit(0);
 		mysql_query($insert_sql);
 	}
 	$rand = rand(5,10);
-	echo "<br><hr>".($rand*40)."  秒钟后跳转";
+	echo "<br><hr>".($rand*20)."  秒钟后跳转";
 print <<<EOT
 <script type='text/javascript'>
-		setTimeout("location.href='post_weibo.php'",1000*40*$rand);
+		setTimeout("location.href='post_weibo.php'",1000*20*$rand);
 </script>
 EOT;
 }

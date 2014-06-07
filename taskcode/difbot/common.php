@@ -31,7 +31,10 @@ function html($url,$post=false){
     curl_close($ch); 
     return $_str;
 }
-
+function println($str) {
+	print_r ( $str );
+	echo "<br><hr><br>";
+}
 function str_conv($str)
 {
 	// $str = str_replace("\n", "<br>", $str);

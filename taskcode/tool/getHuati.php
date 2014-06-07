@@ -1,6 +1,7 @@
 <?php
 include(substr(str_replace("\\", "/", dirname(__FILE__)), 0,-5)."/config.php"); 
 include(str_replace("\\", "/", dirname(__FILE__))."/date.php"); 
+header("Content-type:text/html;charset=utf-8");
 $now = date("Y-m-d",time());
 if($now != $yesterday){
 	file_put_contents("date.php",'<?php $yesterday ="'.$now.'"; ?>');
@@ -12,8 +13,10 @@ print <<<EOT
 EOT;
 }else{ 
 	$p = @$_REQUEST['p']?$_REQUEST['p']:1;
-	$url = "http://huati.weibo.com/aj_topiclist/big?ctg1=99&ctg2=0&prov=0&sort=day&p=$p&t=1&_t=0&__rnd=".time();
+	$url = "http://huati.weibo.com/aj_topiclist/big?ctg1=99&ctg2=0&prov=0&sort=time&p={$p}&t=1&_t=0&__rnd=".mt_rand(1000000000000, 10000000000000); 
+	println($url);
 	$page = getHuati($url);
+	println($page);
 	$page_json = json_decode($page,true) ;
 	$data = $page_json['data']['html'];  
 	preg_match_all("/#(.*)#(.*)<span class=\"num_info\">(.*)<\/span>/iUs", $data, $matches);

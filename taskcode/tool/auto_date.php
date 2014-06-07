@@ -1,1 +1,1 @@
-<?php $yesterday ="2014-05-30"; ?>
+<?php $yesterday ="2014-06-07"; ?>

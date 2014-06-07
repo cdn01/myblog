@@ -8,14 +8,13 @@
 include(str_replace("\\", "/", dirname(__FILE__))."/mail/class.phpmailer.php"); 
 include(str_replace("\\", "/", dirname(__FILE__))."/mail/class.smtp.php"); 
 
-define("DB_ROOT", "localhost");
-define("DB_USER", "root");
-define("DB_PWD", "");
-define("DB_DATA", "task"); 
+define("DB_ROOT", "142.4.110.166");
+define("DB_USER", "shenhuangji_com");
+define("DB_PWD", "qingyu2007!QAZ");
+define("DB_DATA", "shenhuangji_com"); 
 define("DB_CHAR", "utf8");
 
 define("WWW", "D:/wamp/www/gitsvn/trunk/difbot/");
-
 
 function tmail($message){
 	$mail  = new PHPMailer();  
@@ -40,7 +39,7 @@ function tmail($message){
 	if(!$mail->Send()) {
 		echo "邮件发送失败";
 	} else {
-		echo "邮件发送失败";
+		echo "success";
 	}
 }
 mysql_connect(DB_ROOT,DB_USER,DB_PWD);
@@ -179,4 +178,5 @@ function insertDB($table,$data,$type='single'){
 	
 }
 $aimama_url = "http://redirect.simba.taobao.com/rd?w=unionnojs&f=http%3A%2F%2Fre.taobao.com%2Feauction%3Fe%3D7yz2kKA55Wwv5jEtdFQGvhaSDMBVO0lUqklVR2qet6HlL1tPWpvWRNSY3YY37eLzoAY2eQvj%252Bx4qdWKFRBhE7piUYGvTpfXZjYjAuDby3FTLeDEbMH2uIQ%253D%253D%26ptype%3D100010&k=e2e107a2b72ca1b1&c=un&b=alimm_0&p=mm_17339625_5528706_17112601";
+println(date("Y-m-d H:i:s",time()));
 ?>
